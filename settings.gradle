@@ -1,0 +1,2 @@
+include ':app', ':LibMarsdaemon'
+project(':app').projectDir = new File('app')
