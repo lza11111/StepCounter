@@ -60,25 +60,20 @@ public class LoginActivity extends Activity {
         };
     };
     private void ReturnToMain(){
-        //创建一个intent对象
         Intent intent = new Intent();
         Bundle bundle=new Bundle();
         bundle.putInt("OK",1);
         bundle.putString("username",et_qq.getText().toString());
-        //指定原本的class和要启动的class
         intent.setClass(LoginActivity.this, MainActivity.class);
         intent.putExtras(bundle);
-        //调用另外一个新的Activity
         setResult(1000,intent);
-        //startActivity(intent);
-        //关闭原本的Activity
         LoginActivity.this.finish();
     }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        et_qq = (EditText) findViewById(R.id.et_qq);
-        et_psd = (EditText) findViewById(R.id.et_pwd);
+        setContentView(R.layout.login);
+        et_qq = (EditText) findViewById(R.id.username_edit);
+        et_psd = (EditText) findViewById(R.id.password_edit);
 
     }
 

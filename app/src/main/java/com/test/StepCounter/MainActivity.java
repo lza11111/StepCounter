@@ -113,11 +113,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
         /*** the setting for BadgeItem ***/
-        BadgeItem badgeItem = new BadgeItem();
-                            badgeItem.setHideOnSelect(false)
-                                  .setText(String.valueOf(list.size()))
-                                    .setBackgroundColorResource(R.color.orange)
-                                    .setBorderWidth(0);
+//        BadgeItem badgeItem = new BadgeItem();
+//                            badgeItem.setHideOnSelect(false)
+//                                  .setText(String.valueOf(list.size()))
+//                                    .setBackgroundColorResource(R.color.orange)
+//                                    .setBorderWidth(0);
 
 
         /*** the setting for BottomNavigationBar ***/

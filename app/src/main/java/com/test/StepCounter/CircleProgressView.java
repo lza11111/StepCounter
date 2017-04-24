@@ -88,7 +88,7 @@ public class CircleProgressView   extends View {
         mPaint.setStyle(Paint.Style.STROKE);
 
         mPaint1.setAntiAlias(true);
-        mPaint1.setColor(Color.rgb(0xf8, 0x60, 0x30));
+        mPaint1.setColor(Color.rgb(0x1e, 0x90, 0xff));
         canvas.drawColor(Color.TRANSPARENT);
         mPaint1.setStrokeWidth(mCircleLineStrokeWidth1);
         mPaint1.setStyle(Paint.Style.STROKE);
@@ -111,7 +111,7 @@ public class CircleProgressView   extends View {
 
         // 绘制圆圈，进度条背景
         canvas.drawArc(mRectF, -90, 360, false, mPaint);
-        mPaint.setColor(Color.rgb(0xf8, 0x60, 0x30));
+        mPaint.setColor(Color.rgb(0x1e, 0x90, 0xff));
         PathEffect effects = new DashPathEffect(new float[]{5,5,5,5},1);
         mPaint.setPathEffect(effects);//设置画笔为虚线
         canvas.drawArc(mRectF, -90, ((float) mProgress / mMaxProgress) * 360, false, mPaint);
