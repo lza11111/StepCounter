@@ -1,8 +1,10 @@
 package com.test.StepCounter;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.Image;
@@ -24,6 +26,7 @@ import android.view.View;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -189,18 +192,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 transaction.show(mMyfragment);
                 transaction.hide(mIndexfragment);
                 transaction.hide(mRecentfragment);
-                //transaction.commit();
-//                TextView mTV=(TextView) findViewById(R.id.TV_userID)
-//                else mTV.setText(NowUser);
-                //mMyfragment.setUsername(NowUser);
-                //mMyfragment.setUsername(NowUser);
                 break;
-//            default:
-//                if (mRecentfragment == null) {
-//                    mRecentfragment = new recent_fragment();
-//                }
-//                transaction.replace(R.id.ll_content, mRecentfragment);
-//                break;
+
         }
         transaction.commit();
     }
@@ -271,7 +264,32 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             startService(intent);
         }
     }
+    public void ExitLogin(View view){
+        if(NowUser.equals("ID")){
+            Toast.makeText(MainActivity.this,"您还没有登录！", Toast.LENGTH_LONG).show();
+            return;
+        }
+        new AlertDialog.Builder(this).setTitle("确认注销当前用户吗？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        NowUser="ID";
+                        TextView mTv=(TextView)findViewById(R.id.TV_userID);
+                        mTv.setText(NowUser);
+
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“返回”后的操作,这里不设置没有任何操作
+                    }
+                }).show();
+
+    }
 
     /**
      * 判断某个服务是否正在运行的方法
@@ -306,9 +324,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
 
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        unbindService(conn);
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(conn);
+    }
 }

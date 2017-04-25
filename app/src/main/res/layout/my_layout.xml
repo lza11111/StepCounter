@@ -8,32 +8,39 @@
         android:id="@+id/topspace"
         android:layout_width="match_parent"
         android:layout_height="50sp" />
-    <Space
-        android:id="@+id/leftspace"
-        android:layout_below="@id/topspace"
-        android:layout_width="140sp"
-        android:layout_height="100sp" />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="100sp"
         android:layout_height="100sp"
-        android:layout_below="@id/topspace"
-        android:layout_toRightOf="@id/leftspace"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/topspace"
         android:src="@drawable/funny"
         app:civ_border_width="2dp"
         app:civ_border_color="#dddddd"/>
-    <Space
-        android:layout_toRightOf="@id/profile_image"
-        android:layout_width="match_parent"
-        android:layout_below="@id/topspace"
-        android:layout_height="100sp" />
     <TextView
         android:id="@+id/TV_userID"
-        android:layout_width="match_parent"
-        android:layout_height="50sp"
+        android:layout_width="wrap_content"
         android:layout_below="@id/profile_image"
-        android:text="ID"
-        android:textSize="20sp"
-        android:gravity="center"/>
-
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="50sp"
+        android:textSize="20sp"/>
+    <Space
+        android:id="@+id/middlespace"
+        android:layout_below="@+id/TV_userID"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100sp" />
+    <Button
+        android:id="@+id/exitlogin_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exitlogin"
+        android:layout_below="@id/middlespace"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="ExitLogin"
+        />
 </RelativeLayout>

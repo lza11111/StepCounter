@@ -30,13 +30,6 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
-            <Button
-                android:id="@+id/plusonestep"
-                android:layout_below="@id/CPV"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="+1s"
-                android:textSize="30sp"/>
         </LinearLayout>
 
     </RelativeLayout>

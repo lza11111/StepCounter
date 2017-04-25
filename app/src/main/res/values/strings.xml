@@ -3,9 +3,23 @@
     <string name="Recent">历史足迹</string>
     <string name="Index">"首页"</string>
     <string name="My">"我的"</string>
+    <!--LoginLayout-->
     <string name="login_label_username">用户名</string>
     <string name="login_label_password">密码</string>
     <string name="login_username_hint">输入用户名</string>
     <string name="login_label_signin">登录</string>
     <string name="login_register_link">没有帐号？ <a href="#">注册</a></string>
+
+    <!--RegisterLayout-->
+    <string name="register_label_username">用户名</string>
+    <string name="register_label_password">密码</string>
+    <string name="register_username_hint">输入用户名（5~15个字符）</string>
+    <string name="register_password_hint">输入密码（8~16个字符）</string>
+    <string name="register_label_confirm">确认密码</string>
+    <string name="register_label_phone">手机号</string>
+    <string name="register_phone_hint">11位手机号码</string>
+    <string name="register_label_register">注册</string>
+
+    <!--my_layout-->
+    <string name="exitlogin">退出登录</string>
 </resources>

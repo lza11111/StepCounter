@@ -69,7 +69,12 @@ public class recent_fragment extends Fragment {
     private void init() {
         DbUtils.createDb(getContext(), DB_NAME);
         //获取当天的数据，用于展示
-
+        if(MainActivity.NowUser.equals("ID")){
+            list=DbUtils.getQueryAll(StepData.class);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new RecyclerAdapter());
+        }
+        else
         new Thread(){
             public void run(){
                 try{

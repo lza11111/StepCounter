@@ -38,11 +38,4 @@ public class my_fragment extends Fragment {
         mTV.setText(MainActivity.NowUser);
     }
 
-    public void setUsername(String username){
-        //my_fragment My_fragment=new my_fragment();
-        //if(mTV!=null)
-        //mTV =(TextView)getView().findViewById(R.id.TV_userID);
-
-        //return My_fragment;
-    }
 }

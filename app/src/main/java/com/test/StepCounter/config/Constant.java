@@ -8,8 +8,15 @@ public class Constant {
     public static final int MSG_FROM_SERVER = 1;
     public static final int REQUEST_SERVER = 2;
     public static final String LoginUrl= "http://10.0.2.2:88/xampp/PhalApi/Public/chuangxinshijian/?service=User.userLogin";
+    public static final String RegisterUrl= "http://10.0.2.2:88/xampp/PhalApi/Public/chuangxinshijian/?service=User.useradd";
     public static final String getUserStepUrl = "http://10.0.2.2:88/xampp/PhalApi/Public/chuangxinshijian/?service=User.getUserStep";
+
     public static String LoginPost(String user,String psw){
         return "username="+user+"&password="+psw;
     }
+
+    public static String RegisterPost(String user,String psw,String phone){
+        return "username="+user+"&password="+psw+"&phone="+phone;
+    }
+
 }

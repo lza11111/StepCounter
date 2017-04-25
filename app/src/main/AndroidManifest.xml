@@ -24,8 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.test.StepCounter.LoginActivity">
+        <activity android:name="com.test.StepCounter.LoginActivity"/>
 
+        <activity android:name="com.test.StepCounter.RegisterActivity">
         </activity>
         <service
         android:name="com.test.StepCounter.service.StepService"
