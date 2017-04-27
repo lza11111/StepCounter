@@ -4,8 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/my_up_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/blue"
+        android:text="我的"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        />
     <Space
         android:id="@+id/topspace"
+        android:layout_below="@id/my_up_text"
         android:layout_width="match_parent"
         android:layout_height="50sp" />
     <de.hdodenhof.circleimageview.CircleImageView

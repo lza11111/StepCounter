@@ -22,4 +22,10 @@
 
     <!--my_layout-->
     <string name="exitlogin">退出登录</string>
+
+    <!--recent_layout-->
+    <string name="recent_infor_date_label">日期</string>
+    <string name="recent_infor_length_label">里程</string>
+    <string name="recent_infor_step_label">步数</string>
+    <string name="recent_infor_calorie_label">消耗</string>
 </resources>
