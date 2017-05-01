@@ -29,7 +29,32 @@
         android:layout_below="@+id/recent_up_text"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/arrow_height"
+                android:layout_height="@dimen/arrow_width"
+                android:scaleType="centerInside"
+                android:onClick="decmonth"
+                android:src="@drawable/arrow_rotate"/>
+            <TextView
+                android:id="@+id/recent_infor_top_month"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:drawablePadding="3dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/recent_label_size"
+                android:gravity="center"
+                />
+            <ImageView
+                android:layout_width="@dimen/arrow_height"
+                android:layout_height="@dimen/arrow_width"
+                android:scaleType="centerInside"
+                android:onClick="incmonth"
+                android:src="@drawable/hui_discount_item_rule_arrow"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -38,13 +63,16 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
-        <lecho.lib.hellocharts.view.ColumnChartView
+        <!--<lecho.lib.hellocharts.view.ColumnChartView-->
+            <!--android:id="@+id/chart_bottom"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="200dp">-->
+
+        <!--</lecho.lib.hellocharts.view.ColumnChartView>-->
+        <lecho.lib.hellocharts.view.LineChartView
             android:id="@+id/chart_bottom"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
-
-        </lecho.lib.hellocharts.view.ColumnChartView>
-
+            android:layout_height="200dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"

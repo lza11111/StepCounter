@@ -84,12 +84,13 @@
         <Button
             android:id="@+id/register_button"
             android:onClick="login"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/register_phone_edit"
             android:layout_alignRight="@id/register_phone_edit"
             android:text="@string/register_label_register"
-            android:background="@drawable/blue_button" />
+            android:background="@drawable/login_button"
+            android:enabled="false"/>
     </RelativeLayout>
 
 </LinearLayout>

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="我的目标"
+            android:textSize="@dimen/text_size_default" />
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="占位符"
+            android:textSize="@dimen/text_size_default" />
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="占位符"
+            android:textSize="@dimen/text_size_default" />
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="我的好友"
+            android:textSize="@dimen/text_size_default" />
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="每日推荐"
+            android:textSize="@dimen/text_size_default" />
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="最近浏览"
+            android:textSize="@dimen/text_size_default" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="NEW"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+
+        <ImageView
+            android:layout_width="@dimen/new_icon_width"
+            android:layout_height="@dimen/new_icon_height"
+            android:scaleType="centerInside"
+            android:layout_gravity="end"
+            android:src="@drawable/new_icon" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="设置"
+            android:textSize="@dimen/text_size_default" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:layout_width="@dimen/arrow_width"
+                android:layout_height="@dimen/arrow_height"
+                android:src="@drawable/hui_discount_item_rule_arrow" />
+
+            <ImageView
+                android:layout_width="@dimen/new_icon_width"
+                android:layout_height="@dimen/new_icon_height"
+                android:scaleType="centerInside"
+                android:layout_gravity="end"
+                android:src="@drawable/new_icon" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/normal_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:gravity="center_vertical"
+        android:padding="@dimen/normal_space" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="退出登录"
+            android:onClick="ExitLogin"
+            android:textSize="@dimen/text_size_default" />
+
+
+
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
+            android:src="@drawable/hui_discount_item_rule_arrow" />
+    </LinearLayout>
+    <View
+        android:layout_marginLeft="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/normal_bg_color" />
+
+
+
+
+</LinearLayout>

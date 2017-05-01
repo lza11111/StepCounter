@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ public class LoginActivity extends Activity {
     private TextView register;
     private String username;
     private String password;
+    private Button loginbutton;
     private Handler handler = new Handler(){
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -71,6 +75,45 @@ public class LoginActivity extends Activity {
         et_username = (EditText) findViewById(R.id.username_edit);
         et_password = (EditText) findViewById(R.id.password_edit);
         register =(TextView) findViewById(R.id.register_link);
+        loginbutton = (Button) findViewById(R.id.signin_button);
+        et_username.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>5&&et_password.getText().toString().length()>5){
+                    loginbutton.setEnabled(true);
+                }
+                else loginbutton.setEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        et_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>5&&et_username.getText().toString().length()>5){
+                    loginbutton.setEnabled(true);
+                }
+                else loginbutton.setEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         Link link=new Link("注册")
                 .setTextColor(Color.parseColor("#259B24"))                  // optional, defaults to holo blue
                 .setTextColorOfHighlightedLink(Color.parseColor("#0D3D0C")) // optional, defaults to holo blue

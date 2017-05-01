@@ -24,7 +24,9 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.test.StepCounter.LoginActivity;
 import com.test.StepCounter.R;
 import com.test.StepCounter.base.StepMode;
 import com.test.StepCounter.callback.StepCallBack;
@@ -33,7 +35,9 @@ import com.test.StepCounter.pojo.StepData;
 import com.test.StepCounter.utils.CountDownTimer;
 import com.test.StepCounter.utils.DbUtils;
 import com.test.StepCounter.MainActivity;
+import com.test.StepCounter.utils.HttpUtils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,7 +58,15 @@ public class StepService extends Service implements /*SensorEventListener,*/ Ste
     private TimeCount time;
     //当天的日期
     private String CURRENTDATE = "";
-
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constant.UPLOAD_FAILED:
+                    Toast.makeText(StepService.this,"数据上传失败！",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        };
+    };
     private static class MessenerHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -71,6 +83,7 @@ public class StepService extends Service implements /*SensorEventListener,*/ Ste
                         e.printStackTrace();
                     }
                     break;
+
                 default:
                     super.handleMessage(msg);
             }
@@ -203,7 +216,7 @@ public class StepService extends Service implements /*SensorEventListener,*/ Ste
 
     private String getTodayDate() {
         Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         return sdf.format(date);
     }
 
@@ -262,14 +275,34 @@ public class StepService extends Service implements /*SensorEventListener,*/ Ste
             data.setToday(CURRENTDATE);
             data.setStep(tempStep + "");
             DbUtils.insert(data);
+            if(MainActivity.NowUser!= null)saveToserver(data);
         } else if (list.size() == 1) {
             StepData data = list.get(0);
             data.setStep(tempStep + "");
             DbUtils.update(data);
+            if(MainActivity.NowUser!= null)saveToserver(data);
         } else {
         }
     }
 
+    private void saveToserver(StepData data){
+        final String today=data.getToday();
+        final String step = data.getStep();
+        new Thread(){
+            @Override
+            public void run() {
+                try{
+                    HttpUtils httputils = new HttpUtils();
+                    httputils.postKv(Constant.pushUserStepUrl,Constant.postStep(MainActivity.NowUser,today,step));
+                }catch (IOException e){
+                    Message mas = Message.obtain();
+                    mas.what = Constant.UPLOAD_FAILED;
+                    handler.sendMessage(mas);
+                }
+
+            }
+        }.start();
+    }
     private void clearStepData() {
         StepMode.CURRENT_SETP = 0;
     }

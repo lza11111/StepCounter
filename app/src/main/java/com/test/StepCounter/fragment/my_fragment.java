@@ -35,7 +35,8 @@ public class my_fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mTV.setText(MainActivity.NowUser);
+        if(MainActivity.NowUser == null)mTV.setText("点击登录");
+        else mTV.setText(MainActivity.NowUser);
     }
 
 }

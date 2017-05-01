@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.test.StepCounter.base.StepMode;
 import com.test.StepCounter.config.Constant;
 import com.test.StepCounter.customs.ImageBtnWithText;
 import com.test.StepCounter.fragment.recent_fragment;
@@ -40,6 +41,8 @@ import com.test.StepCounter.pojo.StepData;
 import com.test.StepCounter.service.StepService;
 import com.test.StepCounter.utils.DbUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private  List<StepData> list;
     private LinearLayout recentll;
     private int mStep=0;
-    public static String NowUser="ID";
+    public static String NowUser = null;
     private final String TAG = com.test.StepCounter.MainActivity.class.getSimpleName();
     //循环取当前时刻的步数中间的间隔时间
     private long TIME_INTERVAL = 500;
     private CircleProgressView C_PV;
     private Messenger messenger;
     private Messenger mGetReplyMessenger = new Messenger(new Handler(this));
-
+    private String CURRENTDATE;
     private Handler delayHandler;
     ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -184,12 +187,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 //transaction.commit();
                 break;
             case 2:
-                Log.d("UT3",NowUser);
-                if (NowUser.equals("ID")) {
-                    Log.d("UT3","tologin");
-                    tologin();
-                    Log.d("UT3","loginok");
-                }
+//                if (NowUser == null) {
+//                    Log.d("UT3","tologin");
+//                    tologin();
+//                    Log.d("UT3","loginok");
+//                }
                 transaction.show(mMyfragment);
                 transaction.hide(mIndexfragment);
                 transaction.hide(mRecentfragment);
@@ -209,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     }
 
-    private void tologin() {
-
+    public void tologin(View view) {
+        if(NowUser != null)return;
         Intent intent = new Intent();
 
         intent.setClass(MainActivity.this, LoginActivity.class);
@@ -218,6 +220,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         startActivityForResult(intent, 1000);
 
     }
+    public void decmonth(View view){
+        recent_fragment.NowMonth --;
+        if (recent_fragment.NowMonth == 0)recent_fragment.NowMonth = 12;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, new recent_fragment.PlaceholderFragment()).commit();
+    }
+    public void incmonth(View view){
+        recent_fragment.NowMonth ++;
+        if (recent_fragment.NowMonth == 13)recent_fragment.NowMonth = 1;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, new recent_fragment.PlaceholderFragment()).commit();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -240,8 +255,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private void init() {
         DbUtils.createDb(this, DB_NAME);
         //获取当天的数据，用于展示
-       list = DbUtils.getQueryAll(StepData.class);
-
+        mRecentfragment.NowMonth=Integer.valueOf(new SimpleDateFormat("MM").format(new Date(System.currentTimeMillis())));
+        CURRENTDATE= Constant.getTodayDate();
+        list = DbUtils.getQueryAll(StepData.class);
+        int tempStep = StepMode.CURRENT_SETP;
+        //List<StepData> list = DbUtils.getQueryByWhere(StepData.class, "today", new String[]{CURRENTDATE});
+        if (list.size() == 0 || list.isEmpty()) {
+            StepData data = new StepData();
+            data.setToday(CURRENTDATE);
+            data.setStep(tempStep + "");
+            DbUtils.insert(data);
+        }
+        //DbUtils.deleteAll(StepData.class);
 
         C_PV = (CircleProgressView) findViewById(R.id.CPV);
         delayHandler = new Handler(this);
@@ -266,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         }
     }
     public void ExitLogin(View view){
-        if(NowUser.equals("ID")){
+        if(NowUser == null){
             Toast.makeText(MainActivity.this,"您还没有登录！", Toast.LENGTH_LONG).show();
             return;
         }
@@ -276,10 +301,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        NowUser="ID";
+                        NowUser= null;
                         TextView mTv=(TextView)findViewById(R.id.TV_userID);
-                        mTv.setText(NowUser);
-
+                        mTv.setText("点击登录");
+                        Toast.makeText(MainActivity.this,"注销成功！",Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("返回", new DialogInterface.OnClickListener() {

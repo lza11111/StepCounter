@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
@@ -33,6 +30,7 @@ import com.test.StepCounter.utils.StepInfor;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -48,7 +46,9 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +60,8 @@ import java.util.List;
 public class recent_fragment extends Fragment {
     private String DB_NAME = "StepCounter";
     private static List<StepData> list;
+    private static List<StepData> nowlist;
+    public static int NowMonth;
     //private RecyclerView recyclerView;
 
     @Override
@@ -87,7 +89,7 @@ public class recent_fragment extends Fragment {
     private void init() {
         DbUtils.createDb(getContext(), DB_NAME);
         //获取当天的数据，用于展示
-        if (MainActivity.NowUser.equals("ID")) {
+        if (MainActivity.NowUser == null) {
             list = DbUtils.getQueryAll(StepData.class);
             getFragmentManager().beginTransaction().replace(R.id.container, new PlaceholderFragment()).commit();
             //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -101,12 +103,9 @@ public class recent_fragment extends Fragment {
                         Log.d("UT3", kv);
                         Gson gson = new Gson();
                         StepInfor stepInfor = gson.fromJson(kv, StepInfor.class);
-                        //Log.d("UT3",stepInfor.data);
-                        //list =new ArrayList<StepData>();
-                        int len = stepInfor.data.size();
-                        for (int i = 0; i < len; i++)
-                            Log.d("UT3", stepInfor.data.get(i).getToday());
+
                         list = new ArrayList<StepData>(stepInfor.data);
+                        DbUtils.insertAll(list);
                         if (getActivity() != null)
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -171,21 +170,43 @@ public class recent_fragment extends Fragment {
 
         public final static String[] days = new String[]{"Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun",};
 
+        public final static int[] monthday = new int[]{0,31,28,31,30,31,30,31,31,30,31,30,31};
         private LineChartView chartTop;
-        private ColumnChartView chartBottom;
+        private LineChartView chartBottom;
 
         private LineChartData lineData;
-        private ColumnChartData columnData;
+        private LineChartData columnData;
 
         private TextView dateTV, stepTV, lengthTV, xiaohaoTV;
-
+        private TextView topview;
         public PlaceholderFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.recent_layout, container, false);
-
+            nowlist = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                if(getMonth(list.get(i).getToday()) == NowMonth)nowlist.add(list.get(i));
+            }
+            topview=(TextView)rootView.findViewById(R.id.recent_infor_top_month);
+            //NowMonth=Integer.valueOf(new SimpleDateFormat("MM").format(new Date(System.currentTimeMillis())));
+            topview.setText(NowMonth+"月");
+            dateTV=(TextView)rootView.findViewById(R.id.recent_infor_date_data);
+            stepTV=(TextView)rootView.findViewById(R.id.recent_infor_step_data);
+            lengthTV=(TextView)rootView.findViewById(R.id.recent_infor_length_data);
+            xiaohaoTV=(TextView)rootView.findViewById(R.id.recent_infor_calorie_data);
+            if(nowlist.size()!= 0)setDateText(dateTV,getMonth(nowlist.get(nowlist.size()-1).getToday()),getDay(nowlist.get(nowlist.size()-1).getToday()));
+            else setDateText(dateTV,NowMonth,1);
+//                setDateText(dateTV,
+//                    Integer.valueOf(new SimpleDateFormat("MM").format(new Date(System.currentTimeMillis()))),
+//                    Integer.valueOf(new SimpleDateFormat("dd").format(new Date(System.currentTimeMillis()))));
+            if(nowlist.size()!= 0)setBigSmalltext(stepTV,nowlist.get(nowlist.size()-1).getStep(),"步");
+            else setBigSmalltext(stepTV,"0","步");
+            if(nowlist.size()!= 0)setBigSmalltext(lengthTV,String.valueOf(Integer.valueOf(nowlist.get(nowlist.size()-1).getStep())*0.8),"米");
+            else setBigSmalltext(lengthTV,"0","米");
+            if(nowlist.size()!= 0)setBigSmalltext(xiaohaoTV,String.valueOf(Integer.valueOf(nowlist.get(nowlist.size()-1).getStep())*0.1),"千卡");
+            else setBigSmalltext(xiaohaoTV,"0","千卡");
             // *** TOP LINE CHART ***
             //chartTop = (LineChartView) rootView.findViewById(R.id.chart_top);
 
@@ -194,48 +215,70 @@ public class recent_fragment extends Fragment {
 
             // *** BOTTOM COLUMN CHART ***
 
-            chartBottom = (ColumnChartView) rootView.findViewById(R.id.chart_bottom);
+            chartBottom = (LineChartView) rootView.findViewById(R.id.chart_bottom);
 
-            generateColumnData();
+            generateColu1mnData();
 
             return rootView;
         }
 
-        private void generateColumnData() {
-
-            int numSubcolumns = 1;
-            int numColumns = list.size();//months.length;
+        private void generateColu1mnData() {
+            int maxday=0;
+            int numColumns = monthday[NowMonth];//months.length;
+            int listlen=nowlist.size();
             Log.d("UT3", String.valueOf(numColumns));
             List<AxisValue> axisValues = new ArrayList<AxisValue>();
-            List<Column> columns = new ArrayList<Column>();
-            List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i) {
+            List<Line> columns = new ArrayList<Line>();
+            List<PointValue> values =new ArrayList<PointValue>();
+            for (int i = 1; i <= numColumns; ++i) {
+                boolean flag=false;
+                for(int j=0;j<listlen;j++){
+                    String[] date=nowlist.get(j).getToday().split("/");
+                    if(Integer.valueOf(date[1]) == NowMonth && Integer.valueOf(date[2]) == i){
+                        maxday=i;
+                        values.add(new PointValue(i ,Integer.valueOf(nowlist.get(j).getStep())));
+                        flag=true;
+                        break;
+                    }
 
-                values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    values.add(new SubcolumnValue((float) Integer.valueOf(list.get(i).getStep()), ChartUtils.pickColor()));
                 }
-
-                axisValues.add(new AxisValue(i).setLabel(list.get(i).getToday()));
-
-                columns.add(new Column(values).setHasLabelsOnlyForSelected(true));
+                if(!flag)values.add(new PointValue(i, 0));
+                axisValues.add(new AxisValue(i).setLabel(String.valueOf(i)));
             }
 
-            columnData = new ColumnChartData(columns);
+            Line line = new Line(values);
+            line.setColor(ChartUtils.COLOR_BLUE).setCubic(true);
+            line.setCubic(false);
+            List<Line> lines = new ArrayList<Line>();
+            lines.add(line);
 
+            columnData = new LineChartData(lines);
             columnData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
-            columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(2));
-
-            chartBottom.setColumnChartData(columnData);
-
+            columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(5));
+            chartBottom.setLineChartData(columnData);
             // Set value touch listener that will trigger changes for chartTop.
             chartBottom.setOnValueTouchListener(new ValueTouchListener());
-
             // Set selection mode to keep selected month column highlighted.
             chartBottom.setValueSelectionEnabled(true);
+            chartBottom.setMaxZoom(5);
 
-            chartBottom.setZoomType(ZoomType.HORIZONTAL);
+            //Viewport tempViewport = new Viewport(Math.max(0,maxday-10), 0, 50, 10000) ;
+//            Viewport v = new Viewport(0, 1000, 6, 0);
+//            chartBottom.setMaximumViewport(v);
+//            chartBottom.setCurrentViewport(v);
 
+            final Viewport v = new Viewport(chartBottom.getMaximumViewport());
+            v.bottom = 0;
+            v.top = 1000;
+            v.left = 1;
+            v.right = monthday[NowMonth];
+            chartBottom.setMaximumViewport(v);
+            final Viewport v2 = new Viewport(chartBottom.getMaximumViewport());
+            v.bottom = 0;
+            v.top = 1000;
+            v.left = Math.max(0,maxday-5);
+            v.right = Math.min(Math.max(0,maxday+5),monthday[NowMonth]);
+            chartBottom.setCurrentViewport(v);
             // chartBottom.setOnClickListener(new View.OnClickListener() {
             //
             // @Override
@@ -247,7 +290,7 @@ public class recent_fragment extends Fragment {
             //
             // }
             // });
-
+            chartBottom.setZoomType(ZoomType.HORIZONTAL);
         }
 
         /**
@@ -279,7 +322,7 @@ public class recent_fragment extends Fragment {
             chartTop.setViewportCalculationEnabled(false);
 
             // And set initial max viewport and current viewport- remember to set viewports after data.
-            Viewport v = new Viewport(0, 110, 6, 0);
+            Viewport v = new Viewport(0, 1000, 6, 0);
             chartTop.setMaximumViewport(v);
             chartTop.setCurrentViewport(v);
 
@@ -302,19 +345,19 @@ public class recent_fragment extends Fragment {
             chartTop.startDataAnimation(300);
         }
 
-        private class ValueTouchListener implements ColumnChartOnValueSelectListener {
+        private class ValueTouchListener implements LineChartOnValueSelectListener {
 
             @Override
-            public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
+            public void onValueSelected(int columnIndex, int subcolumnIndex, PointValue value) {
                 dateTV=(TextView)getView().findViewById(R.id.recent_infor_date_data);
                 stepTV=(TextView)getView().findViewById(R.id.recent_infor_step_data);
                 lengthTV=(TextView)getView().findViewById(R.id.recent_infor_length_data);
                 xiaohaoTV=(TextView)getView().findViewById(R.id.recent_infor_calorie_data);
                 //generateLineData(value.getColor(), 100);
-                setBigSmalltext(dateTV,list.get(columnIndex).getToday(),"日");
-                setBigSmalltext(stepTV,list.get(columnIndex).getStep(),"步");
-                setBigSmalltext(lengthTV,String.valueOf(Integer.valueOf(list.get(columnIndex).getStep())*0.8),"米");
-                setBigSmalltext(xiaohaoTV,String.valueOf(Integer.valueOf(list.get(columnIndex).getStep())*0.1),"千卡");
+                setDateText(dateTV,NowMonth,subcolumnIndex);
+                setBigSmalltext(stepTV,(int)value.getY()+"","步");
+                setBigSmalltext(lengthTV,String.valueOf((int)value.getY()*0.8),"米");
+                setBigSmalltext(xiaohaoTV,String.valueOf((int)value.getY()*0.1),"千卡");
             }
 
             @Override
@@ -326,6 +369,22 @@ public class recent_fragment extends Fragment {
         }
 
     }
+    private static void setDateText(TextView mTv,int mon,int day){
+
+        Spannable WordtoSpan = new SpannableString(mon+"月"+day+"日");
+        int end0,end1,end2,end3;
+        if(mon<10)end0=0;
+        else end0=1;
+        end1=end0+1;
+        if(day<10)end2=end1+1;
+        else end2=end1+2;
+        end3=end2+1;
+        WordtoSpan.setSpan(new RelativeSizeSpan((float)1), 0, end0, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        WordtoSpan.setSpan(new RelativeSizeSpan((float)0.5), end0+1, end1+1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        WordtoSpan.setSpan(new RelativeSizeSpan((float)1), end1+1, end2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        WordtoSpan.setSpan(new RelativeSizeSpan((float)0.5), end2+1, end3+1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mTv.setText(WordtoSpan);
+    }
     private static void setBigSmalltext(TextView mTv,String big,String small){
 
         Spannable WordtoSpan = new SpannableString(big+small);
@@ -336,5 +395,19 @@ public class recent_fragment extends Fragment {
         WordtoSpan.setSpan(new RelativeSizeSpan((float)1), start0, end0, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         WordtoSpan.setSpan(new RelativeSizeSpan((float)0.5), start1, end1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         mTv.setText(WordtoSpan);
+    }
+
+    private static int getMonth(String s){
+        int mon;
+        String[] t=s.split("/");
+        mon=Integer.valueOf(t[1]);
+        return mon;
+    }
+
+    private static int getDay(String s){
+        int mon;
+        String[] t=s.split("/");
+        mon=Integer.valueOf(t[2]);
+        return mon;
     }
 }

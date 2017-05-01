@@ -2,4 +2,26 @@
 <resources>
     <dimen name="recent_data_size">30dp</dimen>
     <dimen name="recent_label_size">15dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- 字体大小 -->
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="text_size_default">18sp</dimen>
+    <dimen name="text_size_index_home_title">16sp</dimen>
+
+    <!-- 间距 -->
+    <dimen name="normal_space">10dp</dimen>
+    <dimen name="little_sapce">5dp</dimen>
+
+    <!-- 高度 -->
+    <dimen name="normal_input_height">40dp</dimen>
+
+    <!--大小-->
+    <dimen name="arrow_width">20dip</dimen>
+    <dimen name="arrow_height">20dip</dimen>
+    <dimen name="new_icon_width">5dip</dimen>
+    <dimen name="new_icon_height">5dip</dimen>
+
+
 </resources>
