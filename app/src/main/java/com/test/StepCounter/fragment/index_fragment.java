@@ -3,6 +3,7 @@ package com.test.StepCounter.fragment;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -15,6 +16,8 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.support.v4.app.Fragment;
+import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.amap.api.location.AMapLocation;
@@ -22,13 +25,19 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.test.StepCounter.CircleProgressView;
 import com.test.StepCounter.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kevin on 2016/11/20.
@@ -45,6 +54,11 @@ public class index_fragment extends Fragment implements View.OnTouchListener, Lo
     private float touchDownX;  // 手指按下的X坐标
     private float touchUpX;  //手指松开的X坐标
     private boolean Locsuccess = false;
+    private boolean RunStart = false;
+    private List<LatLng> latLngs = new ArrayList<>();
+    private Chronometer timer ;
+    private TextView meterview,speedview;
+    private double metersum = 0;
 
     private AMap aMap;
     private MapView mapView;
@@ -147,6 +161,9 @@ public class index_fragment extends Fragment implements View.OnTouchListener, Lo
         //cpv.setmTxtHint2("今天走了"+String.valueOf(mStep)+"步");
         cpv.setProgress(mStep,mMaxstep);
         viewFlipper = (ViewFlipper) view.findViewById(R.id.index_viewflipper);
+        timer = (Chronometer) view.findViewById(R.id.timer);
+        meterview = (TextView) view.findViewById(R.id.metertext);
+        speedview = (TextView) view.findViewById(R.id.speedtext);
         if(viewFlipper!=null)viewFlipper.setOnTouchListener(this);
 
         if (mapView == null) {
@@ -164,6 +181,23 @@ public class index_fragment extends Fragment implements View.OnTouchListener, Lo
               }
           }
         setUpMap();
+        Button button=(Button) view.findViewById(R.id.startRunbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RunStart = true;
+                timer.setBase(SystemClock.elapsedRealtime());//计时器清零
+                timer.start();
+            }
+        });
+        button = (Button) view.findViewById(R.id.stopRunbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RunStart = false;
+                timer.stop();
+            }
+        });
             return view;
 
     }
@@ -253,6 +287,16 @@ public class index_fragment extends Fragment implements View.OnTouchListener, Lo
                 if(Locsuccess == false){
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                     Locsuccess = true;
+                }
+                if(RunStart == true){
+                    latLngs.add(new LatLng(amapLocation.getLatitude(),amapLocation.getLongitude()));//获取经度)
+                    aMap.addPolyline(new PolylineOptions().
+                            addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+                    float distance =0;
+                    if(latLngs.size()>=2)distance = AMapUtils.calculateLineDistance(latLngs.get(latLngs.size()-2),latLngs.get(latLngs.size()-1));
+                    metersum+=distance;
+                    meterview.setText(metersum+"米");
+                    //speedview.setText(metersum);
                 }
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
