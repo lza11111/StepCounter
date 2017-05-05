@@ -94,6 +94,7 @@ public class StepService extends Service implements /*SensorEventListener,*/ Ste
     public void onCreate() {
         super.onCreate();
         Log.v(TAG, "onCreate");
+        //Toast.makeText(this,"service start",Toast.LENGTH_SHORT).show();
         initBroadcastReceiver();
         startStep();
         startTimeCount();

@@ -19,14 +19,20 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
-
+import android.view.View.OnTouchListener;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private  List<StepData> list;
     private LinearLayout recentll;
     private int mStep=0;
+    private int mMaxstep = 1000;
     public static String NowUser = null;
     private final String TAG = com.test.StepCounter.MainActivity.class.getSimpleName();
     //循环取当前时刻的步数中间的间隔时间
@@ -64,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private Messenger mGetReplyMessenger = new Messenger(new Handler(this));
     private String CURRENTDATE;
     private Handler delayHandler;
+
     ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -83,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         }
     };
 
+
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
@@ -91,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 mStep=msg.getData().getInt("step");
                 C_PV=(CircleProgressView) findViewById(R.id.CPV);
                 if(C_PV!=null) {
-                    C_PV.setmTxtHint2("今天走了" + String.valueOf(mStep) + "步");
-                    C_PV.setProgress(mStep);
+                    //C_PV.setmTxtHint2("今天走了" + String.valueOf(mStep) + "步");
+                    C_PV.setProgress(mStep,mMaxstep);
                 }
                 delayHandler.sendEmptyMessageDelayed(Constant.REQUEST_SERVER, TIME_INTERVAL);
                 break;
@@ -119,17 +128,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         startServiceForStrategy();
         mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
-        /*** the setting for BadgeItem ***/
-//        BadgeItem badgeItem = new BadgeItem();
-//                            badgeItem.setHideOnSelect(false)
-//                                  .setText(String.valueOf(list.size()))
-//                                    .setBackgroundColorResource(R.color.orange)
-//                                    .setBorderWidth(0);
-
-
-        /*** the setting for BottomNavigationBar ***/
-
-//        mBottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         mBottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
 //        mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
@@ -144,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
         mBottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
+
     }
 
     /**
@@ -220,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         startActivityForResult(intent, 1000);
 
     }
+
     public void decmonth(View view){
         recent_fragment.NowMonth --;
         if (recent_fragment.NowMonth == 0)recent_fragment.NowMonth = 12;
@@ -247,8 +247,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         if (!isServiceWork(this, StepService.class.getName())) {
             setupService(true);
             Log.d("UT3","start");
+            //Toast.makeText(MainActivity.this,"start",Toast.LENGTH_SHORT).show();
         } else {
             setupService(false);
+            //Toast.makeText(MainActivity.this,"stop",Toast.LENGTH_SHORT).show();
         }
     }
 

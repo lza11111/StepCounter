@@ -70,8 +70,10 @@
                 android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_gravity="center"
                     android:src="@drawable/my_dianping_user_icon_normal" />
             </FrameLayout>
 
@@ -101,8 +103,10 @@
                 android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_gravity="center"
                     android:src="@drawable/my_favorite_user_icon_normal" />
 
             </FrameLayout>
@@ -133,8 +137,10 @@
                 android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_gravity="center"
                     android:src="@drawable/my_coupon_user_icon_normal"
                     android:contentDescription="" />
             </FrameLayout>

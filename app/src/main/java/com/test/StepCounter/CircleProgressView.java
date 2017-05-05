@@ -118,7 +118,7 @@ public class CircleProgressView   extends View {
 
         // 绘制进度文案显示
         mPaint.setStrokeWidth(mTxtStrokeWidth);
-        String text = mProgress + "%";
+        String text = mProgress + "";
         int textHeight = height / 8;
         mPaint.setTextSize(textHeight);
         int textWidth = (int) mPaint.measureText(text, 0, text.length());
@@ -155,7 +155,8 @@ public class CircleProgressView   extends View {
         this.mMaxProgress = maxProgress;
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(int progress,int max) {
+        this.mMaxProgress=max;
         this.mProgress = progress;
         this.invalidate();
     }
