@@ -24,5 +24,11 @@
     <dimen name="new_icon_width">5dip</dimen>
     <dimen name="new_icon_height">5dip</dimen>
 
+    <dimen name="tab_sport_top_height">350dp</dimen>
+    <dimen name="tab_sport_oval_half_height">70dp</dimen>
+    <dimen name="tab_sport_oval_height">140dp</dimen>
+
+    <dimen name="tab_sport_button_height">130dp</dimen>
+
 
 </resources>

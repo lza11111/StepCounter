@@ -22,4 +22,8 @@
     <color name="yellowGreen">#42bf06</color>
     <color name="normal_blue_btn_unclickable">#a8d0f5</color>
     <color name="normal_blue_btn_pressed">#3366ff</color>
+    <color name="sport_bg">#1E90FF</color>
+    <color name="sport_button_normal">#5CACEE</color>
+    <color name="sport_button_press">#3366ff</color>
+    <color name="write">#fff</color>
 </resources>
