@@ -1,7 +1,9 @@
 package com.test.StepCounter.config;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
 
 /**
  * Created by base on 2016/1/30.
@@ -33,5 +35,9 @@ public class Constant {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         return sdf.format(date);
     }
-
+    public static String getNowtime(){
+        Time time = new Time(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(time);
+    }
 }

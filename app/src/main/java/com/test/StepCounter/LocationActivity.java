@@ -1,9 +1,18 @@
 package com.test.StepCounter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -11,10 +20,21 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMapUtils;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.amap.api.maps2d.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.test.StepCounter.config.Constant;
+import com.test.StepCounter.utils.RouteInfor;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AMapV1地图中简单介绍显示定位小蓝点
@@ -27,13 +47,43 @@ public class LocationActivity extends Activity implements LocationSource,
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
 
+    private List<LatLng> latLngs = new ArrayList<>();
+    private Chronometer timer ;
+    private TextView meterview,speedview;
+    private double metersum = 0;
+    private boolean Locsuccess = false;
+    private boolean RunStart = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+        timer = (Chronometer) findViewById(R.id.timer);
+        meterview = (TextView) findViewById(R.id.metertext);
+        speedview = (TextView) findViewById(R.id.speedtext);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
+        Button button=(Button) findViewById(R.id.startRunbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RunStart = true;
+                timer.setBase(SystemClock.elapsedRealtime());//计时器清零
+                timer.start();
+            }
+        });
+        button = (Button) findViewById(R.id.stopRunbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(RunStart == true && !latLngs.isEmpty()){
+                    saveRoute();
+                }
+                RunStart = false;
+                timer.stop();
+            }
+        });
     }
 
     /**
@@ -111,9 +161,32 @@ public class LocationActivity extends Activity implements LocationSource,
             if (amapLocation != null
                     && amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                if(Locsuccess == false){
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+                    Locsuccess = true;
+                }
+                if(RunStart == true){
+                    latLngs.add(new LatLng(amapLocation.getLatitude(),amapLocation.getLongitude()));//获取经度)
+                    aMap.addPolyline(new PolylineOptions().
+                            addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+                    float distance =0;
+                    if(latLngs.size()>=2)distance = AMapUtils.calculateLineDistance(latLngs.get(latLngs.size()-2),latLngs.get(latLngs.size()-1));
+                    metersum+=distance;
+                    DecimalFormat df = new DecimalFormat("######0.0");
+                    meterview.setText(df.format(metersum)+"米");
+                    String t=timer.getText().toString();
+                    String[] p = t.split(":");
+                    int spend= Integer.valueOf(p[1])+ Integer.valueOf(p[0])*60;
+                    speedview.setText(df.format(metersum/spend)+"米/秒");
+                    //speedview.setText(metersum);
+                }
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
                 Log.e("AmapErr",errText);
+                if(Locsuccess == false){
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(10));
+                    Locsuccess = true;
+                }
             }
         }
     }
@@ -153,5 +226,54 @@ public class LocationActivity extends Activity implements LocationSource,
         }
         mlocationClient = null;
     }
+    public void saveRoute(){
+        new AlertDialog.Builder(this).setTitle("是否结束当前跑步？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ReturnToMain();
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“返回”后的操作,这里不设置没有任何操作
+                    }
+                }).show();
+
+    }
+    private void ReturnToMain(){
+        //        RouteInfor routeInfor=new RouteInfor();
+//        routeInfor.username= MainActivity.NowUser;
+//        routeInfor.date= Constant.getTodayDate();
+//        routeInfor.time= Constant.getNowtime();
+//        routeInfor.points=new ArrayList<>();
+//        for(int i=0;i<latLngs.size();i++){
+//            routeInfor.points.add(new ArrayList<Double>());
+//            routeInfor.points.get(i).add(latLngs.get(i).latitude);
+//            routeInfor.points.get(1).add(latLngs.get(i).longitude);
+//        }
+        String t=timer.getText().toString();
+        String[] p = t.split(":");
+        int spend= Integer.valueOf(p[1])+ Integer.valueOf(p[0])*60;
+//        routeInfor.spend=spend;
+//        Gson gson = new Gson();
+//        String ans=gson.toJson(routeInfor);
+//        Toast.makeText(LocationActivity.this,ans,Toast.LENGTH_SHORT).show();
+//        Log.d("UT3",ans);
+
+
+        Intent intent = new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putInt("OK",1);
+        bundle.putDouble("meter",metersum);
+        bundle.putDouble("time",spend/60);
+        intent.setClass(LocationActivity.this, MainActivity.class);
+        intent.putExtras(bundle);
+        setResult(1005,intent);
+        LocationActivity.this.finish();
+    }
 }

@@ -47,6 +47,7 @@ import com.test.StepCounter.pojo.StepData;
 import com.test.StepCounter.service.StepService;
 import com.test.StepCounter.utils.DbUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private Messenger mGetReplyMessenger = new Messenger(new Handler(this));
     private String CURRENTDATE;
     private Handler delayHandler;
+
+    private int Nowtimes = 0;
+    private double Nowsumtime = 0.0;
 
     ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -233,6 +237,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         transaction.replace(R.id.container, new recent_fragment.PlaceholderFragment()).commit();
     }
 
+    public void startrun(View view){
+        if(NowUser != null)return;
+        Intent intent = new Intent();
+
+        intent.setClass(MainActivity.this, LocationActivity.class);
+
+        startActivityForResult(intent, 1005);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -241,6 +254,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         {
             NowUser = data.getExtras().getString("username");
             //mMyfragment.setUsername(NowUser);
+        }
+        else if(requestCode == 1005 && resultCode == 1005){
+            Double t = new Double(0.0);
+            TextView sum = (TextView) findViewById(R.id.tab_sport_mile_tv);
+            t=Double.valueOf(sum.getText().toString());
+            t+=data.getDoubleExtra("meter",0.0);
+            DecimalFormat    df   = new DecimalFormat("######0.0");
+            sum.setText(String.valueOf(df.format(t/1000)));
+
+            sum= (TextView) findViewById(R.id.tab_sport_num_tv);
+            sum.setText(++Nowtimes+"");
+
+            sum =(TextView)findViewById(R.id.tab_sport_time_num_tv);
+            Nowsumtime+=data.getDoubleExtra("time",0.0);
+            sum.setText(Nowsumtime+"");
         }
     }
     private void startServiceForStrategy() {
